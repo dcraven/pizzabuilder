@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Pepperoni",
+    "toppings": "pepperoni, cheese",
+    "price": "10.99"
+  },
+  {
+    "name": "Cheese",
+    "toppings": "cheese",
+    "price": "9.99"
+  },
+  {
+    "name": "Vegetarian",
+    "toppings": "onions, cheese, peppers",
+    "price": "9.99"
+  }
+]

@@ -1,0 +1,76 @@
+package com.dcraven.pizzabuilder.model;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class PizzaTest {
+
+    @Test
+    public void pizzaCreateName() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        assertThat(pizza.getName(), is("Pepperoni Deluxe"));
+    }
+
+    @Test
+    public void pizzaSetGetName() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        pizza.setName("Stinky Deluxe");
+
+        assertThat(pizza.getName(), is("Stinky Deluxe"));
+    }
+
+    @Test
+    public void pizzaSetGetId() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        pizza.setId(1234L);
+
+        assertThat(pizza.getId(), is(1234L));
+    }
+
+    @Test
+    public void pizzaCreateToppings() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        assertThat(pizza.getToppings(), is("pepperoni, sausage, onion"));
+    }
+
+    @Test
+    public void pizzaToppingsToArrayList() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        List<String> pizzaToppingsList = pizza.getToppingsAsList();
+
+        assertThat(pizzaToppingsList.size(), is(3));
+        assertThat(pizzaToppingsList.contains("pepperoni"), is(true));
+        assertThat(pizzaToppingsList.contains("sausage"), is(true));
+        assertThat(pizzaToppingsList.contains("onion"), is(true));
+    }
+
+    @Test
+    public void pizzaSetToppingsFromList() {
+        List<String> toppings = new ArrayList<>();
+        toppings.add("anchovies");
+        toppings.add("green peppers");
+
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        pizza.setToppings(toppings);
+
+        assertThat(pizza.getToppings(), is("anchovies, green peppers"));
+    }
+
+    @Test
+    public void pizzaSetToppingsFromString() {
+        Pizza pizza = new Pizza("Pepperoni Deluxe", "pepperoni, sausage, onion");
+        pizza.setToppings("double cheese, bacon, hamburger, sausage");
+
+        assertThat(pizza.getToppings(), is("double cheese, bacon, hamburger, sausage"));
+    }
+}
