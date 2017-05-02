@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IMenu, IPizza} from './pizza';
 import {PizzaService} from './pizza.service';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -12,14 +13,17 @@ import {PizzaService} from './pizza.service';
 export class PizzaListComponent {
   pageTitle: string = 'Pizza List';
   errorMessage: string;
+  router: Router;
 
   pizzaMenu: IMenu;
 
-  constructor(private _pizzaService: PizzaService) { }
+  constructor(private _pizzaService: PizzaService, _router: Router) {
+    this.router = _router;
+  }
 
-  editPizza(pizza: IPizza) {
-
+  editSignaturePizza(pizza: IPizza) {
     console.log("Edit pizza: " + pizza.name);
+    this.router.navigateByUrl('/pizzas/signature/' + pizza.name);
   }
 
   ngOnInit(): void {

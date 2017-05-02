@@ -1,6 +1,6 @@
 export interface IPizza {
   name: string;
-  toppings: string;
+  toppings: string[];
   price: number;
 }
 

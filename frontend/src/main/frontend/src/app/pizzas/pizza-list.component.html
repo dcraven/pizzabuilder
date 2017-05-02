@@ -19,9 +19,9 @@
         <tbody>
         <tr *ngFor='let pizza of pizzaMenu.signaturePizzas'>
           <td>{{ pizza.name }}</td>
-          <td>{{ pizza.toppings | lowercase }}</td>
+          <td>{{ pizza.toppings }}</td>
           <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
-          <td><button class='btn btn-primary' (click)='editSignaturePizza(pizza.name)'>
+          <td><button class='btn btn-primary' (click)='editSignaturePizza(pizza)'>
             Edit
           </button></td>
         </tr>

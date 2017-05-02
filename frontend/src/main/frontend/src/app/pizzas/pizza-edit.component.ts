@@ -16,8 +16,9 @@ import 'rxjs/add/operator/switchMap';
 export class PizzaEditComponent implements OnInit {
   @Input() pizza: IPizza;
   pageTitle: string = "Pizza Editor";
+  toppingString: string = "";
 
-  availableToppings = ['none', 'pepperoni', 'onions', 'peppers', 'sausage', 'tomato', 'cheese'];
+  availableToppings = ['pepperoni', 'onions', 'peppers', 'sausage', 'tomato', 'cheese'];
 
   constructor(
     private pizzaService: PizzaService,
@@ -30,4 +31,24 @@ export class PizzaEditComponent implements OnInit {
       .switchMap((params: Params) => this.pizzaService.getSignaturePizza(params['name']))
       .subscribe(pizza => this.pizza = pizza);
   }
+
+  removeTopping(topping: string): void {
+    console.log("Removing: " + topping);
+  }
+
+  modifyToppingString(event) {
+    if(event.target.checked) {
+      if (this.toppingString != "") {
+        this.toppingString += ", ";
+      }
+      this.toppingString += event.target.value
+    } else {
+      this.toppingString = this.toppingString.replace(", " + event.target.value, "");
+      this.toppingString = this.toppingString.replace(event.target.value, "");
+    }
+    if(this.toppingString.startsWith(",")) {
+      this.toppingString = this.toppingString.slice(2);
+    }
+  }
 }
+
