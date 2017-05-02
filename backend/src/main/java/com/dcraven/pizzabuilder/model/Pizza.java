@@ -4,6 +4,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,10 +15,16 @@ public class Pizza {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    private float price;
+
     @NotNull
     private String name;
-    @NotNull
-    private String toppings;
+
+    @ElementCollection
+    @CollectionTable(name="toppings", joinColumns=@JoinColumn(name="pizza_id"))
+    @Column(name="toppings")
+    private List<String> toppings = new ArrayList<String>();
 
     public float getPrice() {
         return price;
@@ -27,12 +34,19 @@ public class Pizza {
         this.price = price;
     }
 
-    private float price;
+    public List<String> getToppings() {
+        return toppings;
+    }
+
+
+    public void setToppingsList(List<String> toppings) {
+        this.toppings = toppings;
+    }
 
     public Pizza() {
     }
 
-    public Pizza(String name, String toppings) {
+    public Pizza(String name, List<String> toppings) {
         this.name = name;
         this.toppings = toppings;
     }
@@ -45,18 +59,6 @@ public class Pizza {
         this.name = name;
     }
 
-    public String getToppings() {
-        return toppings;
-    }
-
-    public void setToppings(String toppings) {
-        this.toppings = toppings;
-    }
-
-    public void setToppings(List<String> toppings) {
-        this.toppings = StringUtils.collectionToDelimitedString(toppings, ", ");
-    }
-
     public long getId() {
         return id;
     }
@@ -65,12 +67,7 @@ public class Pizza {
         this.id = id;
     }
 
-    public List<String> getToppingsAsList() {
-        List<String> toppingsList = Arrays.asList(this.toppings.split("\\s*,\\s*"));
-        return toppingsList;
-    }
-
     public String toString() {
-        return "NAME: " + this.getName() + " TOPPINGS: " + this.getToppings() + " PRICE: " + this.getPrice();
+        return "ID: " + this.getId() + " NAME: " + this.getName() + " TOPPINGS: " + this.getToppings().toString() + " PRICE: " + this.getPrice();
     }
 }

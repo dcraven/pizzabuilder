@@ -1,0 +1,25 @@
+<div class="container">
+  <h3>Pizza Editor Form</h3>
+  <form #pizzaForm="ngForm" *ngIf="pizza">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" required
+          [(ngModel)]="pizza.name" name="name">
+      TODO: remove this: {{pizza.name}}
+    </div>
+    <div class="form-group">
+      <div>
+      <label for="toppings">Toppings</label>
+      <button class="btn btn-primary">Add</button>
+      </div>
+      <div *ngFor="let topping of pizza.toppings">
+          <input type="text" class=form-control" value="pizza.toppings" readonly>
+      </div>
+
+      <select class="form-control" id="toppings">
+        <option *ngFor="let topping of availableToppings" [value]="topping">{{topping}}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>

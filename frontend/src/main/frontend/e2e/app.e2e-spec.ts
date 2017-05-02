@@ -1,4 +1,4 @@
-import { PizzaBuilderPage } from './app.po';
+import {PizzaBuilderPage} from './app.po';
 
 describe('pizzabuilder App', () => {
   let page: PizzaBuilderPage;

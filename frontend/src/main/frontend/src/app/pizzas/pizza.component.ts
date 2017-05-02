@@ -1,10 +1,11 @@
-import {Component} from "@angular/core";
+import {Component} from '@angular/core';
 
 
 @Component({
   moduleId: module.id,
   selector: "pizza-component",
-  template: "<h3>{{pizza.name}}</h3>"
+  templateUrl: "pizza.component.html",
+  styleUrls: ["pizza.component.css"]
 })
 
 export class PizzaComponent {
