@@ -1,4 +1,5 @@
 <div>
+  <div class="panel panel-default">
   <div class='panel-heading'>
     <h2>Signature Pizzas</h2>
   </div>
@@ -19,41 +20,50 @@
         <tbody>
         <tr *ngFor='let pizza of pizzaMenu.signaturePizzas'>
           <td>{{ pizza.name }}</td>
-          <td>{{ pizza.toppings }}</td>
+          <td>{{ pizza.toppings.join(", ") }}</td>
           <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
-          <td><button class='btn btn-primary' (click)='editSignaturePizza(pizza)'>
-            Edit
-          </button></td>
+          <td>
+            <button class='btn btn-primary' (click)='editSignaturePizza(pizza)'>
+              Edit
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <div class='panel-heading' *ngIf="pizzaMenu">
-    <h2>Custom Pizzas</h2>
   </div>
-  <div class='panel-body'>
-    <div class='row'>
+  <div class="panel panel-default" *ngIf="pizzaMenu && pizzaMenu.customPizzas.length">
+    <div class='panel-heading'>
+      <h2>Custom Pizzas</h2>
     </div>
-    <div class='row'>
-    </div>
-    <div class='table-responsive'>
-      <table class='table' *ngIf='pizzaMenu'>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Toppings</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor='let pizza of pizzaMenu.customPizzas'>
-          <td>{{ pizza.name }}</td>
-          <td>{{ pizza.toppings | lowercase }}</td>
-          <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
-        </tr>
-        </tbody>
-      </table>
+    <div class='panel-body'>
+      <div class='row'>
+      </div>
+      <div class='row'>
+      </div>
+      <div class='table-responsive'>
+        <table class='table' *ngIf='pizzaMenu'>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Toppings</th>
+            <th>Price</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor='let pizza of pizzaMenu.customPizzas'>
+            <td>{{ pizza.name }}</td>
+            <td>{{ pizza.toppings.join(", ") }}</td>
+            <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
+            <td>
+              <button class='btn btn-primary' (click)='editCustomPizza(pizza)'> Edit</button>
+              <button class='btn btn-danger' (click)='deleteCustomPizza(pizza)'> Delete</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

@@ -1,3 +1,12 @@
 .form-check-label {
   font-weight: normal;
 }
+
+#price-string {
+  width: 80px;
+  float: right;
+}
+
+#price-label {
+  margin-right: 20px;
+}

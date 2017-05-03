@@ -1,11 +1,8 @@
 package com.dcraven.pizzabuilder.model;
 
-import org.springframework.util.StringUtils;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -21,10 +18,28 @@ public class Pizza {
     @NotNull
     private String name;
 
+    private boolean signature = false;
+
     @ElementCollection
-    @CollectionTable(name="toppings", joinColumns=@JoinColumn(name="pizza_id"))
-    @Column(name="toppings")
-    private List<String> toppings = new ArrayList<String>();
+    @CollectionTable(name = "toppings", joinColumns = @JoinColumn(name = "pizza_id"))
+    @Column(name = "toppings")
+    private List<String> toppings = new ArrayList<>();
+
+    public Pizza() {
+    }
+
+    public Pizza(String name, List<String> toppings) {
+        this.name = name;
+        this.toppings = toppings;
+    }
+
+    public boolean getSignature() {
+        return signature;
+    }
+
+    public void setSignature(boolean signature) {
+        this.signature = signature;
+    }
 
     public float getPrice() {
         return price;
@@ -38,16 +53,7 @@ public class Pizza {
         return toppings;
     }
 
-
     public void setToppingsList(List<String> toppings) {
-        this.toppings = toppings;
-    }
-
-    public Pizza() {
-    }
-
-    public Pizza(String name, List<String> toppings) {
-        this.name = name;
         this.toppings = toppings;
     }
 

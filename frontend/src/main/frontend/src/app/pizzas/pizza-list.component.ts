@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IMenu, IPizza} from './pizza';
 import {PizzaService} from './pizza.service';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -11,19 +11,36 @@ import {Router} from "@angular/router";
 })
 
 export class PizzaListComponent {
-  pageTitle: string = 'Pizza List';
   errorMessage: string;
   router: Router;
 
   pizzaMenu: IMenu;
 
-  constructor(private _pizzaService: PizzaService, _router: Router) {
+  constructor(
+    private _pizzaService: PizzaService,
+    _router: Router,
+    private route: ActivatedRoute
+  ) {
     this.router = _router;
   }
 
   editSignaturePizza(pizza: IPizza) {
-    console.log("Edit pizza: " + pizza.name);
     this.router.navigateByUrl('/pizzas/signature/' + pizza.name);
+  }
+
+  editCustomPizza(inpizza: IPizza) {
+    console.log("ngPizzaList: Getting PIZZA: " + inpizza.id);
+    this.route.params
+      .switchMap((outpizza: IPizza) => this._pizzaService.getCustomPizza(inpizza))
+      .subscribe(pizza => pizza = pizza);
+    this.router.navigateByUrl('/pizzas/' + inpizza.id);
+  }
+
+  deleteCustomPizza(pizza: IPizza) {
+    console.log("Params: " + this.route.params);
+    this.route.params
+      .switchMap((pizza: IPizza) => this._pizzaService.deletePizza(pizza))
+      .subscribe(pizza => pizza = pizza);
   }
 
   ngOnInit(): void {

@@ -11,12 +11,28 @@ import 'rxjs/add/operator/map';
 export class PizzaService {
   constructor(private _http:Http) {}
 
+  servicePizza: IPizza;
+
   private _pizzaUrl = 'api/pizzas';
 
   putPizza(pizza: IPizza): Observable<IPizza> {
-    return this._http.put(this._pizzaUrl, pizza)
+    return this._http.post(this._pizzaUrl, pizza)
       .map((response: Response) => <IPizza> response.json())
       .do(data=>console.log("Pizza create: " + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  updatePizza(pizza: IPizza): Observable<IPizza> {
+    return this._http.put(this._pizzaUrl, pizza.id, pizza)
+      .map((response: Response) => <IPizza> response.json())
+      .do(data=>console.log("Pizza update: " + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  deletePizza(pizza: IPizza): Observable<IPizza> {
+    return this._http.delete(this._pizzaUrl, pizza)
+      .map((response: Response) => <IPizza> response.json())
+      .do(data=>console.log("Pizza delete: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
@@ -27,7 +43,12 @@ export class PizzaService {
       .catch(this.handleError);
   }
 
-
+  getCustomPizza(pizza: IPizza): Observable<IPizza> {
+    return this._http.get(this._pizzaUrl + '/' + pizza.id)
+      .map((response: Response) => <IPizza> response.json())
+      .do(data => console.log("Custom: " + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
 
   getMenu(): Observable<IMenu> {
     return this._http.get(this._pizzaUrl)

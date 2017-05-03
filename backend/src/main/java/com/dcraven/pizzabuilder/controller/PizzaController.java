@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @RestController
@@ -31,14 +32,16 @@ public class PizzaController {
     }
 
     // Create a new pizza and add to the database
-    @RequestMapping(value = "pizzas", method = RequestMethod.POST)
+    @RequestMapping(value = "pizzas/**", method = RequestMethod.POST)
     public Pizza create(@RequestBody Pizza pizza) {
+        System.out.println("In PizzaController saving: " + pizza);
         return pizzaService.create(pizza);
     }
 
     // Get a single pizza from the repository
     @RequestMapping(value = "pizzas/{id}", method = RequestMethod.GET)
     public Pizza get(@PathVariable Long id) {
+        System.out.println("Getting pizza with ID: " + id);
         return pizzaService.get(id);
     }
 
@@ -52,5 +55,11 @@ public class PizzaController {
     @RequestMapping(value = "pizzas/{id}", method = RequestMethod.DELETE)
     public Pizza delete(@PathVariable Long id) {
         return pizzaService.delete(id);
+    }
+
+    @RequestMapping(value = "pizzas", method = RequestMethod.DELETE)
+    public Pizza delete(@RequestBody Pizza pizza) {
+        System.out.println("In PizzaController deleting: " + pizza.toString());
+        return pizzaService.delete(pizza.getId());
     }
 }

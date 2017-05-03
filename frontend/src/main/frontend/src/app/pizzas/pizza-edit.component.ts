@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {IPizza} from './pizza';
+import {Component, Input, OnInit, AfterContentChecked} from '@angular/core';
+import {IMenu, IPizza} from './pizza';
 import {PizzaService} from './pizza.service';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Location} from '@angular/common';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -15,40 +14,67 @@ import 'rxjs/add/operator/switchMap';
 
 export class PizzaEditComponent implements OnInit {
   @Input() pizza: IPizza;
-  pageTitle: string = "Pizza Editor";
   toppingString: string = "";
+  menu: IMenu;
+  nameConflict: boolean = true;
 
   availableToppings = ['pepperoni', 'onions', 'peppers', 'sausage', 'tomato', 'cheese'];
 
-  constructor(
-    private pizzaService: PizzaService,
-    private route: ActivatedRoute,
-    private location: Location
-  ) {}
+  constructor(private pizzaService: PizzaService,
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     this.route.params
       .switchMap((params: Params) => this.pizzaService.getSignaturePizza(params['name']))
       .subscribe(pizza => this.pizza = pizza);
+
+    this.route.params
+      .switchMap((params: Params) => this.pizzaService.getMenu())
+      .subscribe(menu => this.menu = menu);
   }
 
-  removeTopping(topping: string): void {
-    console.log("Removing: " + topping);
+  ngAfterContentChecked(): void {
+    if (this.pizza) {
+      this.toppingString = this.pizza.toppings.join(", ");
+    }
+  }
+
+  pizzaEditOnSubmit(pizza: IPizza) {
+    this.pizza = pizza;
+    this.pizza.signature = false;
+    if (this.pizza.id > 0) {
+      this.route.params
+        .switchMap((pizza: IPizza) => this.pizzaService.updatePizza(this.pizza))
+        .subscribe(pizza => this.pizza = pizza);
+    } else {
+      this.route.params
+        .switchMap((pizza: IPizza) => this.pizzaService.putPizza(this.pizza))
+        .subscribe(pizza => this.pizza = pizza);
+    }
+    this.router.navigateByUrl('/pizzas');
+  }
+
+  checkNameConflicts(event): void {
+    let name = event.target.value;
+    for (let pizza of this.menu.signaturePizzas) {
+      if (pizza.name === name) {
+        this.nameConflict = true;
+        break;
+      }
+      this.nameConflict = false;
+    }
   }
 
   modifyToppingString(event) {
-    if(event.target.checked) {
-      if (this.toppingString != "") {
-        this.toppingString += ", ";
-      }
-      this.toppingString += event.target.value
+    if (event.target.checked) {
+      this.pizza.toppings.push(event.target.value);
     } else {
-      this.toppingString = this.toppingString.replace(", " + event.target.value, "");
-      this.toppingString = this.toppingString.replace(event.target.value, "");
+      let index = this.pizza.toppings.indexOf(event.target.value);
+      this.pizza.toppings.splice(index, 1);
     }
-    if(this.toppingString.startsWith(",")) {
-      this.toppingString = this.toppingString.slice(2);
-    }
+    this.pizza.price = 9.99 + this.pizza.toppings.length;
   }
 }
 
