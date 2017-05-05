@@ -1,17 +1,20 @@
 [
   {
+    "id": "999",
     "name": "Pepperoni",
     "toppings": ["pepperoni", "cheese"],
     "price": "10.99",
     "signature": true
   },
   {
+    "id": "998",
     "name": "Cheese",
     "toppings": ["cheese"],
     "price": "9.99",
     "signature": true
   },
   {
+    "id": "997",
     "name": "Vegetarian",
     "toppings": ["onions", "cheese", "peppers"],
     "price": "9.99",

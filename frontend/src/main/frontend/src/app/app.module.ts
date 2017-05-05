@@ -9,6 +9,7 @@ import {PizzaListComponent} from './pizzas/pizza-list.component';
 import {RouterModule} from '@angular/router';
 import {PizzaService} from './pizzas/pizza.service';
 import {PizzaEditComponent} from './pizzas/pizza-edit.component';
+import {PizzaResolver} from './pizzas/pizza-resolver.service';
 
 @NgModule({
   declarations: [
@@ -23,12 +24,12 @@ import {PizzaEditComponent} from './pizzas/pizza-edit.component';
     RouterModule.forRoot([
       {path: 'pizzas', component: PizzaListComponent},
       {path: 'pizzas/signature/:name', component: PizzaEditComponent},
-      {path: 'pizzas/:id', component: PizzaEditComponent},
+      {path: 'pizzas/:id', component: PizzaEditComponent, resolve: { pizza: PizzaResolver }},
       {path: '', redirectTo: 'pizzas', pathMatch: 'full'},
       {path: '**', redirectTo: 'pizzas', pathMatch: 'full'}
     ])
   ],
-  providers: [PizzaService],
+  providers: [PizzaService, PizzaEditComponent, PizzaResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

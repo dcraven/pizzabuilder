@@ -9,49 +9,55 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class PizzaService {
-  constructor(private _http:Http) {}
+  constructor(private http: Http) {}
 
   servicePizza: IPizza;
 
   private _pizzaUrl = 'api/pizzas';
 
   putPizza(pizza: IPizza): Observable<IPizza> {
-    return this._http.post(this._pizzaUrl, pizza)
+    return this.http.post(this._pizzaUrl, pizza)
       .map((response: Response) => <IPizza> response.json())
       .do(data=>console.log("Pizza create: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   updatePizza(pizza: IPizza): Observable<IPizza> {
-    return this._http.put(this._pizzaUrl, pizza.id, pizza)
+    return this.http.put(this._pizzaUrl, pizza.id, pizza)
       .map((response: Response) => <IPizza> response.json())
       .do(data=>console.log("Pizza update: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  deletePizza(pizza: IPizza): Observable<IPizza> {
-    return this._http.delete(this._pizzaUrl, pizza)
+  getPizza(id: number): Observable<IPizza> {
+    console.log("GETTING PIZZA***********");
+    return this.http.get(this._pizzaUrl + '/' + id)
       .map((response: Response) => <IPizza> response.json())
-      .do(data=>console.log("Pizza delete: " + JSON.stringify(data)))
+      .do(data => console.log("Custom: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
+  deletePizza(pizza: IPizza) {
+    return this.http.delete(this._pizzaUrl + "/" + pizza.id)
+      .map((response: Response) => <IPizza>response.json().data);
+  }
+
   getSignaturePizza(name: string): Observable<IPizza> {
-    return this._http.get(this._pizzaUrl + '/signature/' + name)
+    return this.http.get(this._pizzaUrl + '/signature/' + name)
       .map((response: Response) => <IPizza> response.json())
       .do(data=>console.log("Signature: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  getCustomPizza(pizza: IPizza): Observable<IPizza> {
-    return this._http.get(this._pizzaUrl + '/' + pizza.id)
+  getCustomPizza(id: number): Observable<IPizza> {
+    return this.http.get(this._pizzaUrl + '/' + id)
       .map((response: Response) => <IPizza> response.json())
       .do(data => console.log("Custom: " + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getMenu(): Observable<IMenu> {
-    return this._http.get(this._pizzaUrl)
+    return this.http.get(this._pizzaUrl)
       .map((response: Response) => <IMenu> response.json())
       .do(data => console.log('All: ' +  JSON.stringify(data)))
       .catch(this.handleError);

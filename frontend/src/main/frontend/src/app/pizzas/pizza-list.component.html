@@ -23,7 +23,7 @@
           <td>{{ pizza.toppings.join(", ") }}</td>
           <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
           <td>
-            <button class='btn btn-primary' (click)='editSignaturePizza(pizza)'>
+            <button class='btn btn-primary' (click)='editPizza(pizza)'>
               Edit
             </button>
           </td>
@@ -57,8 +57,8 @@
             <td>{{ pizza.toppings.join(", ") }}</td>
             <td>{{ pizza.price | currency:'CAD':true:'1.2-2'}}</td>
             <td>
-              <button class='btn btn-primary' (click)='editCustomPizza(pizza)'> Edit</button>
-              <button class='btn btn-danger' (click)='deleteCustomPizza(pizza)'> Delete</button>
+              <button class='btn btn-primary' (click)='editPizza(pizza)'> Edit</button>
+              <button class='btn btn-danger' (click)='deletePizza(pizza)'> Delete</button>
             </td>
           </tr>
           </tbody>

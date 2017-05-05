@@ -1,16 +1,16 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3>Pizza Editor</h3>
+    <h3>Pizza Editor:</h3>
   </div>
   <div class="panel-body">
     <form #pizzaForm="ngForm" (ngSubmit)="pizzaEditOnSubmit(pizza)" *ngIf="pizza">
-      <div class="form-group" [ngClass]="pizzaForm.valid && !nameConflict? 'has-success': 'has-error'">
+      <div class="form-group" [ngClass]="pizzaForm.valid && (!nameConflict || !pizza.signature) ? 'has-success': 'has-error'">
         <label>Enter Name:</label><label>{{nameConflict}}</label>
         <input type="text" [(ngModel)]="pizza.name"  (keyup)="checkNameConflicts($event)" class="form-control" id="name"
                required autocomplete="off"
                name="name">
         <span class="help-block small" *ngIf="!pizzaForm.valid">Enter a name for your new pizza. You cannot leave this blank.</span>
-        <span class="help-block small" *ngIf="nameConflict">There is already a Signature pizza with this name.</span>
+        <span class="help-block small" *ngIf="nameConflict &&  pizza.signature">There is already a Signature pizza with this name.</span>
       </div>
       <div class="form-group">
         <div>
@@ -36,8 +36,8 @@
         </div>
       </div>
         <div class="panel-footer">
-          <button type="submit" [disabled]="!pizzaForm.valid || nameConflict" class="btn btn-success">Submit</button>
-          <button type="submit" class="btn btn-danger">Cancel</button>
+          <button type="submit" (click)="pizzaEditOnSubmit(pizza)" [disabled]="!pizzaForm.valid || (nameConflict && pizza.signature)" class="btn btn-success">Submit</button>
+          <button type="submit" (click)="pizzaEditOnCancel()" class="btn btn-danger">Cancel</button>
           <label style="float: right">{{pizza.price}}</label>
           <label id="price-label" style="float: right">Price: </label>
       </div>

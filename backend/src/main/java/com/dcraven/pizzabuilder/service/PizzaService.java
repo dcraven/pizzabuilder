@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,7 +42,15 @@ public class PizzaService {
     }
 
     public Pizza get(Long id) {
-        return this.pizzaRepository.findOne(id);
+        Pizza thePizza = null;
+        List<Pizza> customList = this.getCustomPizzas();
+        customList.addAll(this.getDefaultPizzas());
+        for(Pizza pizza: customList) {
+            if (pizza.getId() == id) {
+                thePizza = pizza;
+            }
+        }
+        return thePizza;
     }
 
     public Pizza set(Long id, Pizza pizza) {

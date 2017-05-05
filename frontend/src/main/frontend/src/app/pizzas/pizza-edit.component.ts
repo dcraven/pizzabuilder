@@ -12,7 +12,7 @@ import 'rxjs/add/operator/switchMap';
   styleUrls: ['pizza-edit.component.css']
 })
 
-export class PizzaEditComponent implements OnInit {
+export class PizzaEditComponent implements OnInit, AfterContentChecked {
   @Input() pizza: IPizza;
   toppingString: string = "";
   menu: IMenu;
@@ -26,9 +26,7 @@ export class PizzaEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params
-      .switchMap((params: Params) => this.pizzaService.getSignaturePizza(params['name']))
-      .subscribe(pizza => this.pizza = pizza);
+    this.route.data.subscribe((data: { pizza: IPizza }) => this.pizza = data.pizza);
 
     this.route.params
       .switchMap((params: Params) => this.pizzaService.getMenu())
@@ -41,19 +39,30 @@ export class PizzaEditComponent implements OnInit {
     }
   }
 
+  pizzaEditOnCancel() {
+    this.router.navigateByUrl('/pizzas');
+  }
+
   pizzaEditOnSubmit(pizza: IPizza) {
     this.pizza = pizza;
     this.pizza.signature = false;
-    if (this.pizza.id > 0) {
-      this.route.params
-        .switchMap((pizza: IPizza) => this.pizzaService.updatePizza(this.pizza))
-        .subscribe(pizza => this.pizza = pizza);
-    } else {
-      this.route.params
-        .switchMap((pizza: IPizza) => this.pizzaService.putPizza(this.pizza))
-        .subscribe(pizza => this.pizza = pizza);
-    }
+
+    this.route.params
+      .switchMap((pizza: IPizza) => this.pizzaService.putPizza(this.pizza))
+      .subscribe(
+        success => this.refreshPizzaList(pizza),
+        pizza => this.pizza = pizza);
+
     this.router.navigateByUrl('/pizzas');
+  }
+
+  refreshPizzaList(pizza: IPizza) {
+    for (let menuPizza of this.menu.customPizzas) {
+      if (pizza.id == menuPizza.id) {
+        menuPizza = pizza;
+      }
+    }
+    console.log("NEW PIZZA LIST: " + this.menu.customPizzas);
   }
 
   checkNameConflicts(event): void {
